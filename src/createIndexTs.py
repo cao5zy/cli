@@ -9,6 +9,7 @@
 # 3. 运行py_createindex.bat
 import os
 
+cmdformat = "export * from './%s';\n"
 def main():
 	dir = os.getcwd()
 
@@ -16,10 +17,14 @@ def main():
 
 	with open(indexTsFileName, 'w') as indexTsFile:
 		for fileName in getTsFiles(dir):
-			indexTsFile.write('''import * from './%s';\r\n '''% fileName)
+			indexTsFile.write(cmdformat % fileName)
 
 def getTsFiles(dir):
-	return ["heeloo.ts"];
+	fileNames = []
+	for fileName in [itemName for itemName in os.listdir(dir) if itemName != "index.ts" and os.path.isfile(os.path.join(dir, itemName)) and itemName.endswith('.ts')]:
+		fileNames.append(fileName[0:len(fileName) - 3])#移除.ts
+
+	return fileNames
 
 if __name__ == '__main__':
 	main()
