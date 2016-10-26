@@ -1,0 +1,1 @@
+python "c:\Projects\cli\cli\src\createIndexTs.py"
