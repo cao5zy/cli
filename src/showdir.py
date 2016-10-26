@@ -10,6 +10,7 @@
 
 import sys
 import os
+import re
 
 outputFileName = "showdir.output.txt"
 excludes = ['_ReSharper.ExstreamExtraction', 'Web References', 'Service References', 'bin', 'Release', 'Debug', 'TodoCache', 'BuildScriptCache', 'NamedArguments', 'WordIndex',
@@ -17,18 +18,31 @@ excludes = ['_ReSharper.ExstreamExtraction', 'Web References', 'Service Referenc
 newNameList = []
 def main():
 	path = os.path.join(os.getcwd(), outputFileName);
+	rootPath = os.getcwd()
 	with open(path, 'w') as outfile:
-		for root, dirs, files in os.walk(os.getcwd()):
-			for d in dirs:
-				if (getRootName(root) in excludes) or (d in excludes) or hasExcludeNames(root, excludes):
-					continue
-				outfile.write('%s -> %s\n' % (generateNode(getRootName(root)), generateNode(d)))
+		for root, dirs, files in os.walk(rootPath):
+			if getRootName(root) in excludes:
+				continue
+
+			#输出文件夹名称
+			writeline(outfile, getIndentNumber(rootPath, root), getRootName(root))
+
+			for f in files:
+				writeline(outfile, getIndentNumber(rootPath, root) + 1, f)
+
 		
-
-
+def writeline(file, levelNum, content):
+	indent = (levelNum if levelNum > 0 else 1)  * (' ' * 4);
+	file.write('%s%s\n'%(indent, content))
 
 def getRootName(root):
 	return root[root.rfind('\\') + 1:]
+
+def getIndentNumber(rootPath, path):
+	leftPath = path.replace(rootPath, '')
+
+	count = len(re.compile(r'\\').findall(leftPath))
+	return count if count > 0 else 1
 
 def generateNode(name):
 	conv = [' ', '-', '.']
