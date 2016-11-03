@@ -6,7 +6,7 @@
 # 使用方法：
 # 1. 打开cmd
 # 2. 切换到typescript项目的目录
-# 3. 运行mngModule --create
+# 3. 运行mngModule -c create -m [模块名称，根据ts的习惯，建议写成aaa-bbb]
 # 创建目录结构如下
 # component
 # model
