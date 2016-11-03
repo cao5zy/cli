@@ -26,15 +26,13 @@ serviceName = "service"
 templateName = "template"
 
 def main():
-	options,args = getopt.getopt(sys.argv[1:], "c:m:")
+	options,args = getopt.getopt(sys.argv[1:], "ac:m:")
 	print(options)
-	print(args)
-
 	cmdOpt = find(options, lambda o:o[0] == '-c')
 	if cmdOpt:
 		if cmdOpt[1] == 'create':
 			dir = os.getcwd()
-			moduleName = "test-module"
+			moduleName = find(options, lambda o:o[0] == '-m')[1]
 			createModule(dir, moduleName)
 	else:
 		print('没有设置c[ommand]参数,程序不能正常执行')
@@ -43,7 +41,7 @@ def main():
 
 
 def find(arr, predicate):
-	objs = filter(map(predicate, arr))
+	objs = list(filter(predicate, arr))
 	if objs and len(objs) > 0:
 		return objs[0]
 	else:
